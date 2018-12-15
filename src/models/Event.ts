@@ -1,13 +1,18 @@
-export class Event {
+import { EventType } from "../types.d";
+/**
+ * @author Mohamed Camara 
+ */
+
+export class Event implements EventType {
 
 
-	private aggregateType: string;
-	private aggregateId: number;
-	private eventType: string;
-	private eventId: number;
-	private eventData: [];
-	private dispatcherType: string;
-	private dispatcherId: number;
+	aggregateType: string;
+	aggregateId: number;
+	eventType: string;
+	eventId: number;
+	eventData: [];
+	dispatcherType: string;
+	dispatcherId: number;
 
 	constructor( aggregateType: string,
 			aggregateId: number,
