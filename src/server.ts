@@ -30,16 +30,29 @@ class Server {
       });
   }
 
-  private resolveResponse(service: ServiceType, path: string, req: express.Request): void {
+  private async resolveResponse(service: ServiceType, 
+      path: string, 
+      req: express.Request,
+      res: express.Response,): Promise<void> {
     const url = `${service.host}:${service.port}/${path}`;
-    axios.call("get", url)  
+    await axios.call("get", url)  
       .then((response: axiosTypes.AxiosResponse) => {
         // handle success
         console.log("================Host Reponse ======================");
         console.log(response);
+
+        const {
+          data,
+          status,
+          statusText,
+          headers,
+        } = response;
+        res
+          .status(status)
+          .send(data);
       })
       .catch((error: axiosTypes.AxiosError) => {
-        console.log("================ERROR ======================");
+        res.send(error);
         // handle error
         console.log(error);
       })
@@ -49,7 +62,9 @@ class Server {
   }
 
   private setMiddlewares(): void {
-    this.express.use( (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    this.express.use( (req: express.Request, 
+      res: express.Response, 
+      next: express.NextFunction) => {
 
       const serviceIdentifier: string = req.originalUrl.split("/")[1];
       const targetPath = req.originalUrl.split("/").splice(2).join("/");
@@ -60,10 +75,8 @@ class Server {
         return;
       }else{
         const service = route.getService();
-        this.resolveResponse(service, targetPath, req);
+        this.resolveResponse(service, targetPath, req, res);
       }
-      console.log(route);
-      res.send();
       // next();
     });
   }

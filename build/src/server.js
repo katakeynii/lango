@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const router_1 = require("./router");
@@ -25,21 +33,27 @@ class Server {
             host: "http://167.99.202.94", port: 3002
         });
     }
-    resolveResponse(service, path, req) {
-        const url = `${service.host}:${service.port}/${path}`;
-        axios_1.default.call("get", url)
-            .then((response) => {
-            // handle success
-            console.log("================Host Reponse ======================");
-            console.log(response);
-        })
-            .catch((error) => {
-            console.log("================ERROR ======================");
-            // handle error
-            console.log(error);
-        })
-            .then(() => {
-            // always executed
+    resolveResponse(service, path, req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const url = `${service.host}:${service.port}/${path}`;
+            yield axios_1.default.call("get", url)
+                .then((response) => {
+                // handle success
+                console.log("================Host Reponse ======================");
+                console.log(response);
+                const { data, status, statusText, headers, } = response;
+                res
+                    .status(status)
+                    .send(data);
+            })
+                .catch((error) => {
+                res.send(error);
+                // handle error
+                console.log(error);
+            })
+                .then(() => {
+                // always executed
+            });
         });
     }
     setMiddlewares() {
@@ -54,10 +68,8 @@ class Server {
             }
             else {
                 const service = route.getService();
-                this.resolveResponse(service, targetPath, req);
+                this.resolveResponse(service, targetPath, req, res);
             }
-            console.log(route);
-            res.send();
             // next();
         });
     }
