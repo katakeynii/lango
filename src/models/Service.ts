@@ -1,4 +1,15 @@
-export class Service {
+import * as axiosTypes from "axios";
+import axios from "axios";
+import * as express from 'express';
+import { ServiceType } from "../types.d";
+
+/**
+ * 
+ * @author Mohamed Camara GUEYE
+ * 
+ */
+
+export class Service implements ServiceType {
 
 	identifier: string;
 	host: string;
@@ -9,4 +20,8 @@ export class Service {
 		this.host = host;
 		this.port = port;
 	}
+	toString(): string {
+		return `${this.host}:${this.port}`;
+	}
+
 }
