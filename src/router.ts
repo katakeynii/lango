@@ -1,5 +1,5 @@
 import { Service } from "./models/Service";
-import { RouteType } from "./types/Route";
+import { RouteType, ServiceType } from "./types";
 
 /**
  *
@@ -14,27 +14,38 @@ export class Router {
 	private routes: Route[] = [];
 	constructor() {}
 
-	setRoute(identifier: string, service: Service ): void{
+	setRoute(identifier: string, service: ServiceType ): Router{
 		const route = new Route(identifier, service);
 		this.routes.push(route);
+		return this;
 	}
 
 	getRoute(identifier: string): Route | null {
 		return this.routes.filter((item: Route, index: number , routes: Route[]) =>{
-			return  item.identifier === identifier;
+			return  item.getIdentifier() === identifier;
 		})[0];
 	}
 
 	getRoutes(): Route[]{
 	 	return this.routes;
 	}
+
 }
 class Route {
-	identifier: string;
-	service: Service;
-	constructor(identifier: string, service: Service) {
+	private identifier: string;
+	private service: ServiceType;
+	constructor(identifier: string, service: ServiceType) {
 		this.identifier = identifier;
 		this.service = service;
+	}
+	getIdentifier(): string{
+		return this.identifier;
+	}
+	getService(): ServiceType {
+		return this.service;
+	}
+	toString(): string {
+		return this.identifier	;
 	}
 }
 
