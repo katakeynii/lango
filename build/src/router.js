@@ -1,12 +1,44 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Service_1 = require("./models/Service");
-function getRoutes() {
-    return [
-        new Service_1.Service("core", "http://206.189.121.190", 3001),
-        new Service_1.Service("transfo", "http://206.189.121.190", 5001),
-        new Service_1.Service("auth", "http://167.99.202.94", 3001)
-    ];
+/**
+ *
+ * This class register routes of our services.
+ * Services are our microservices applications.
+ *
+ * @author Mohamed Camara GUEYE
+ */
+class Router {
+    constructor() {
+        this.routes = [];
+    }
+    setRoute(identifier, service) {
+        const route = new Route(identifier, service);
+        this.routes.push(route);
+        return this;
+    }
+    getRoute(identifier) {
+        return this.routes.filter((item, index, routes) => {
+            return item.getIdentifier() === identifier;
+        })[0];
+    }
+    getRoutes() {
+        return this.routes;
+    }
 }
-exports.getRoutes = getRoutes;
+exports.Router = Router;
+class Route {
+    constructor(identifier, service) {
+        this.identifier = identifier;
+        this.service = service;
+    }
+    getIdentifier() {
+        return this.identifier;
+    }
+    getService() {
+        return this.service;
+    }
+    toString() {
+        return this.identifier;
+    }
+}
 //# sourceMappingURL=router.js.map

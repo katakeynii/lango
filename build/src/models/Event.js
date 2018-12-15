@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @author Mohamed Camara
+ */
 class Event {
     constructor(aggregateType, aggregateId, eventType, eventId, eventData, dispatcherType, dispatcherId) {
         this.aggregateType = aggregateType;
