@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-class App {
+class Server {
     constructor() {
         this.express = express();
+        this.setMiddlewares();
         this.mountRoutes();
     }
     mountRoutes() {
@@ -15,6 +16,14 @@ class App {
         });
         this.express.use('/', router);
     }
+    setMiddlewares() {
+        this.express.use((req, res, next) => {
+            console.log(Object.keys(req));
+            console.log(req.originalUrl);
+            console.log(req.baseUrl);
+            next();
+        });
+    }
 }
-exports.default = new App().express;
+exports.default = new Server().express;
 //# sourceMappingURL=server.js.map
